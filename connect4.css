@@ -1,0 +1,31 @@
+html {
+    background-color: #464e51;
+}
+
+.field {
+    background-color: white;
+    width: 6rem;
+    height: 6rem;
+    border: 6px solid  #00008b;
+    border-radius: 50%;
+}
+
+.container {
+    display: flex;
+    background-color: #00008b;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row:hover{
+    opacity: 0.75;
+}
+
+.field.p1 {
+    background-color: red;
+}
+
+.field.p2 {
+    background-color: yellow;
+}
