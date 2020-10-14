@@ -76,11 +76,12 @@ function getPosition(field) {
 function checkWonHorizontal(pos) {
     var tokens = 0;
     var i = 1;
+    var col;
 
-    while (container.children[pos.col - i]) {
-        if (container.children[pos.col - i].children[pos.row].classList.contains(player)) {
+    //left of pos
+    while (col = container.children[pos.col - i]) {
+        if (col.children[pos.row].classList.contains(player)) {
             tokens++;
-            console.log("found left")
         } else {
             break;
         }
@@ -88,19 +89,17 @@ function checkWonHorizontal(pos) {
 
     }
 
+    //right of pos
     i = 1;
-
-    while (container.children[pos.col + i]) {
-        if (container.children[pos.col + i].children[pos.row].classList.contains(player)) {
+    while (col = container.children[pos.col + i]) {
+        if (col.children[pos.row].classList.contains(player)) {
             tokens++;
-            console.log("found right")
         } else {
             break;
         }
         i++;
     }
 
-    console.log("tokens horizontal: " + tokens)
     if (tokens >= 3) {
         return true;
     }
@@ -110,29 +109,29 @@ function checkWonHorizontal(pos) {
 function checkWonVertical(pos) {
     var tokens = 0;
     var i = 1;
+    var field;
 
-    while (container.children[pos.col].children[pos.row + i]) {
-        if (container.children[pos.col].children[pos.row + i].classList.contains(player)) {
+    //below pos
+    while (field = container.children[pos.col].children[pos.row + i]) {
+        if (field.classList.contains(player)) {
             tokens++;
-            console.log("found down")
         } else {
             break;
         }
         i++;
     }
 
-    console.log("tokens vertical: " + tokens)
     if (tokens >= 3) {
         return true;
     }
     return false;
 }
 
-function checkWonDiagonal1(fieldPos) {
+function checkWonDiagonal1(pos) {
     return false;
 }
 
-function checkWonDiagonal2(fieldPos) {
+function checkWonDiagonal2(pos) {
     return false;
 }
 
