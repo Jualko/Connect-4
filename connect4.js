@@ -23,6 +23,8 @@ function handleColClick(oEv) {
     if (field) {
         if (!checkWon(field)) {
             switchPlayer();
+        } else {
+            console.log(player + " won");
         }
 
     }
@@ -98,14 +100,31 @@ function checkWonHorizontal(pos) {
         i++;
     }
 
-    console.log("tokens " + tokens)
+    console.log("tokens horizontal: " + tokens)
     if (tokens >= 3) {
         return true;
     }
     return false;
 }
 
-function checkWonVertical(fieldPos) {
+function checkWonVertical(pos) {
+    var tokens = 0;
+    var i = 1;
+
+    while (container.children[pos.col].children[pos.row + i]) {
+        if (container.children[pos.col].children[pos.row + i].classList.contains(player)) {
+            tokens++;
+            console.log("found down")
+        } else {
+            break;
+        }
+        i++;
+    }
+
+    console.log("tokens vertical: " + tokens)
+    if (tokens >= 3) {
+        return true;
+    }
     return false;
 }
 
