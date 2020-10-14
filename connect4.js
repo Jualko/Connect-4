@@ -1,9 +1,9 @@
 var player;
 var gameOver;
-
-initializeVariables();
+var container;
 
 document.addEventListener("DOMContentLoaded", function (event) {
+    initializeVariables();
     attachEventListeners();
 });
 
@@ -55,23 +55,70 @@ function switchBackgroundColor(col) {
 }
 
 function checkWon(field) {
-    const fieldPos = getPosition(field);
-    console.log("row: " + fieldPos[0] + ", col: " + fieldPos[1])
-
-    if (false) {
+    const pos = getPosition(field);
+    console.log("row: " + pos.row + ", col: " + pos.col);
+    if (checkWonHorizontal(pos) || checkWonDiagonal2(pos) || checkWonDiagonal1(pos) || checkWonVertical(pos)) {
         gameOver = true;
+        return true;
     }
+
+    return false;
 }
 
 function getPosition(field) {
-    debugger
-    var fieldRow = [].indexOf.call(field.parentElement.children, field) + 1;
-    var fieldCol = [].indexOf.call(field.parentElement.parentElement.children, field.parentElement) + 1;
-    return [fieldRow, fieldCol];
+    var row = [].indexOf.call(field.parentElement.children, field);
+    var col = [].indexOf.call(container.children, field.parentElement);
+    return { 'row': row, 'col': col };
+}
+
+function checkWonHorizontal(pos) {
+    var tokens = 0;
+    var i = 1;
+
+    while (container.children[pos.col - i]) {
+        if (container.children[pos.col - i].children[pos.row].classList.contains(player)) {
+            tokens++;
+            console.log("found left")
+        } else {
+            break;
+        }
+        i++;
+
+    }
+
+    i = 1;
+
+    while (container.children[pos.col + i]) {
+        if (container.children[pos.col + i].children[pos.row].classList.contains(player)) {
+            tokens++;
+            console.log("found right")
+        } else {
+            break;
+        }
+        i++;
+    }
+
+    console.log("tokens " + tokens)
+    if (tokens >= 3) {
+        return true;
+    }
+    return false;
+}
+
+function checkWonVertical(fieldPos) {
+    return false;
+}
+
+function checkWonDiagonal1(fieldPos) {
+    return false;
+}
+
+function checkWonDiagonal2(fieldPos) {
+    return false;
 }
 
 function initializeVariables() {
     player = "p1";
     gameOver = false;
-
+    container = document.getElementsByClassName("container")[0];
 }
