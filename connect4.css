@@ -6,7 +6,7 @@ html {
     background-color: white;
     width: 6rem;
     height: 6rem;
-    border: 6px solid  #00008b;
+    border: 6px solid #00008b;
     border-radius: 50%;
 }
 
@@ -18,7 +18,7 @@ html {
     margin-right: auto;
 }
 
-.col:hover{
+.col:hover {
     opacity: 0.75;
 }
 
@@ -28,4 +28,17 @@ html {
 
 .field.p2 {
     background-color: yellow;
+}
+
+.field.won {
+    animation: won 0.5s infinite alternate;
+}
+
+@keyframes won {
+    from {
+        filter: brightness(100%);
+    }
+    to {
+        filter: brightness(50%);
+    }
 }
