@@ -18,7 +18,7 @@ html {
     margin-right: auto;
 }
 
-.row:hover{
+.col:hover{
     opacity: 0.75;
 }
 
