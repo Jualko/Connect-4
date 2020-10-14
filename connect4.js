@@ -21,16 +21,17 @@ function handleColClick(oEv) {
     const field = addToken(this);
 
     if (field) {
-        if (!checkWon(field)) {
+        const won = checkWon(field);
+        if (!won) {
             switchPlayer();
         } else {
-            console.log(player + " won");
-            console.log(checkWon(field));
+            addWonAnimation(won);
         }
 
     }
 }
 
+//returns false or field where the token was added
 function addToken(col) {
     fields = col.children;
     for (let i = 1; i < fields.length + 1; i++) {
@@ -40,6 +41,7 @@ function addToken(col) {
             return e;
         }
     }
+    return false;
 }
 
 function switchPlayer() {
@@ -57,14 +59,17 @@ function switchBackgroundColor(col) {
     html.style.backgroundColor = col;
 }
 
+//returns false or array containing all 4 winning fields
 function checkWon(field) {
     const pos = getPosition(field);
-    if (checkWonHorizontal(pos) || checkWonDiagonal2(pos) || checkWonDiagonal1(pos) || checkWonVertical(pos)) {
+    const winningFields = checkWonHorizontal(pos) || checkWonDiagonal2(pos) || checkWonDiagonal1(pos) || checkWonVertical(pos);
+
+    if (winningFields) {
         gameOver = true;
-        return checkWonHorizontal(pos) || checkWonDiagonal2(pos) || checkWonDiagonal1(pos) || checkWonVertical(pos);
+        winningFields.push(field);
     }
 
-    return gameOver;
+    return winningFields;
 }
 
 function getPosition(field) {
@@ -73,6 +78,7 @@ function getPosition(field) {
     return { 'row': row, 'col': col };
 }
 
+//returns false or array containing the 3 winning fields
 function checkWonHorizontal(pos) {
     let fields = [];
     let i = 1;
@@ -88,7 +94,6 @@ function checkWonHorizontal(pos) {
             break;
         }
         i++;
-
     }
 
     //right of pos
@@ -103,12 +108,13 @@ function checkWonHorizontal(pos) {
         i++;
     }
 
-    if (fields.length === 3) {
+    if (fields.length >= 3) {
         return fields;
     }
     return false;
 }
 
+//returns false or array containing the 3 winning fields
 function checkWonVertical(pos) {
     let tokens = 0;
     let i = 1;
@@ -118,26 +124,106 @@ function checkWonVertical(pos) {
     //below pos
     while (field = container.children[pos.col].children[pos.row + i]) {
         if (field.classList.contains(player)) {
-            fields.push(field);;
+            fields.push(field);
         } else {
             break;
         }
         i++;
     }
 
-    if (fields.length === 3) {
+    if (fields.length >= 3) {
         return fields;
     }
     return false;
 }
 
+//returns false or array containing the 3 winning fields
 function checkWonDiagonal1(pos) {
+    let fields = [];
+    let i = 1;
+    let col;
+    let field = [];
+
+    //above/right of pos
+    while (col = container.children[pos.col + i]) {
+        if (field = col.children[pos.row - i]) {
+            if (field.classList.contains(player)) {
+                fields.push(field);
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+        i++;
+    }
+
+    //below/left of pos
+    i = 1;
+    while (col = container.children[pos.col - i]) {
+        if (field = col.children[pos.row + i]) {
+            if (field.classList.contains(player)) {
+                fields.push(field);
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+        i++;
+    }
+
+    if (fields.length >= 3) {
+        return fields;
+    }
     return false;
 }
 
+//returns false or array containing the 3 winning fields
 function checkWonDiagonal2(pos) {
+    let fields = [];
+    let i = 1;
+    let col;
+    let field = [];
+
+    //above/left of pos
+    while (col = container.children[pos.col - i]) {
+        if (field = col.children[pos.row - i]) {
+            if (field.classList.contains(player)) {
+                fields.push(field);
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+        i++;
+    }
+
+    //below/right of pos
+    i = 1;
+    while (col = container.children[pos.col + i]) {
+        if (field = col.children[pos.row + i]) {
+            if (field.classList.contains(player)) {
+                fields.push(field);
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+        i++;
+    }
+
+    if (fields.length >= 3) {
+        return fields;
+    }
     return false;
 }
+
+function addWonAnimation(fields) {
+    fields.forEach(e => e.classList.add("won"));
+};
 
 function initializeVariables() {
     player = "p1";
