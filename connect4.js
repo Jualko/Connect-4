@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 function attachEventListeners() {
-    var elements = document.getElementsByClassName("col");
-    var aElements = [].slice.call(elements);
+    const elements = document.getElementsByClassName("col");
+    const aElements = [].slice.call(elements);
     aElements.forEach(e => e.addEventListener("click", handleColClick));
 }
 
@@ -18,13 +18,14 @@ function handleColClick(oEv) {
         return;
     }
 
-    var field = addToken(this);
+    const field = addToken(this);
 
     if (field) {
         if (!checkWon(field)) {
             switchPlayer();
         } else {
             console.log(player + " won");
+            console.log(checkWon(field));
         }
 
     }
@@ -52,36 +53,37 @@ function switchPlayer() {
 }
 
 function switchBackgroundColor(col) {
-    var html = document.getElementsByTagName("html")[0];
+    const html = document.getElementsByTagName("html")[0];
     html.style.backgroundColor = col;
 }
 
 function checkWon(field) {
     const pos = getPosition(field);
-    console.log("row: " + pos.row + ", col: " + pos.col);
     if (checkWonHorizontal(pos) || checkWonDiagonal2(pos) || checkWonDiagonal1(pos) || checkWonVertical(pos)) {
         gameOver = true;
-        return true;
+        return checkWonHorizontal(pos) || checkWonDiagonal2(pos) || checkWonDiagonal1(pos) || checkWonVertical(pos);
     }
 
-    return false;
+    return gameOver;
 }
 
 function getPosition(field) {
-    var row = [].indexOf.call(field.parentElement.children, field);
-    var col = [].indexOf.call(container.children, field.parentElement);
+    const row = [].indexOf.call(field.parentElement.children, field);
+    const col = [].indexOf.call(container.children, field.parentElement);
     return { 'row': row, 'col': col };
 }
 
 function checkWonHorizontal(pos) {
-    var tokens = 0;
-    var i = 1;
-    var col;
+    let fields = [];
+    let i = 1;
+    let col;
+    let field = [];
 
     //left of pos
     while (col = container.children[pos.col - i]) {
-        if (col.children[pos.row].classList.contains(player)) {
-            tokens++;
+        field = col.children[pos.row];
+        if (field.classList.contains(player)) {
+            fields.push(field);
         } else {
             break;
         }
@@ -92,37 +94,39 @@ function checkWonHorizontal(pos) {
     //right of pos
     i = 1;
     while (col = container.children[pos.col + i]) {
-        if (col.children[pos.row].classList.contains(player)) {
-            tokens++;
+        field = col.children[pos.row];
+        if (field.classList.contains(player)) {
+            fields.push(field);
         } else {
             break;
         }
         i++;
     }
 
-    if (tokens >= 3) {
-        return true;
+    if (fields.length === 3) {
+        return fields;
     }
     return false;
 }
 
 function checkWonVertical(pos) {
-    var tokens = 0;
-    var i = 1;
-    var field;
+    let tokens = 0;
+    let i = 1;
+    let field;
+    let fields = [];
 
     //below pos
     while (field = container.children[pos.col].children[pos.row + i]) {
         if (field.classList.contains(player)) {
-            tokens++;
+            fields.push(field);;
         } else {
             break;
         }
         i++;
     }
 
-    if (tokens >= 3) {
-        return true;
+    if (fields.length === 3) {
+        return fields;
     }
     return false;
 }
